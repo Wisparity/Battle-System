@@ -2,12 +2,18 @@
 using namespace std;
 void BattleSystem();
 int MonsterGen();
-int PlayerHealth = 50; // 
+int PlayerHealth = 50; // global variable
+string inventory[5] = {"sword", "shield", "potion", " ", " "};
 int main() {
-	int room = 1;;
+	//for (int i = 0; i < 10; i++)
+	//	inventory[i] = " ";
+	int room = 1;
 	char input = 'a';
 	srand(time(NULL)); //pulling a random seed based of the computer's clock
 	while (PlayerHealth >= 0 && input != 'q') {
+		cout << "your inventory";
+		for (int i = 0; i < 5; i++)
+			cout<<inventory[i]<<" ";
 		switch (room) {
 		case 1:
 			cout << " You're in room 1, you can go (s)outh" << endl;
@@ -24,11 +30,11 @@ int main() {
 				BattleSystem();
 			if (PlayerHealth <= 0)
 				break;
-		}
+		} // end of switch
 	}// end of game loop
 	if (PlayerHealth <= 0)
 		cout << "GAME OVER!" << endl;
-}
+}//end of main
 
 int MonsterGen() {
 	int num = rand() % 100;
@@ -42,6 +48,7 @@ int MonsterGen() {
 	}
 }
 void BattleSystem() {
+	cout << "An Enemy Attacks!" << endl;
 	int MonsterType = MonsterGen();
 	system("pause");
 	int MonsterHealth = 0; //default value
@@ -58,11 +65,19 @@ void BattleSystem() {
 			MonsterAtk = rand() % 25; //hits from 0-24
 		else if (MonsterType == 2)
 			MonsterAtk = rand() % 10 + 5;
+
+		if (inventory[1] == "shield") {
+			cout << "your shield partially blocks the blow!" << endl;
+			MonsterAtk /= 2;//cut damage in half
+		}
 		cout << "the monster attacks you for" << MonsterAtk << " dmg!" << endl;
 
-		PlayerHealth -= 10;
+		PlayerHealth -= MonsterAtk;
 
-		PlayerAtk = rand() % 11 + 20;
+		if(inventory[0]=="sword")
+			PlayerAtk = rand() % 30 + 30;
+		else
+			PlayerAtk = rand() % 22 + 10;
 
 		cout << "you attack the monster for 10 dmg!" << PlayerAtk << endl;
 		MonsterHealth -= PlayerAtk;
